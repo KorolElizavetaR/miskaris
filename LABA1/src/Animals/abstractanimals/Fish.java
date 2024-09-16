@@ -18,7 +18,7 @@ public abstract class Fish implements Aquatic{
 		this.species = species;
 	}
 
-	public Fish(String species) {
+	protected Fish(String species) {
 		this.species = species;
 	}
 

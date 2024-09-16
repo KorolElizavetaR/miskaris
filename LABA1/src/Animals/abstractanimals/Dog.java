@@ -18,11 +18,14 @@ public abstract class Dog implements Preditor, Terrestrial{
 	public void setSleepingHours(Integer sleepingHours) {
 		this.sleepingHours = sleepingHours;
 	}
+	
 	public abstract String Bark();
+	
 	@Override
 	public String eat(String food) {
 		return "Dog: i eat " + food;
 	}
+	
 	@Override
 	public String huntFor(Animals an) {
 		return "Since i am a good boy, i am playing (not hunting) with " + an.WhoAmI();
