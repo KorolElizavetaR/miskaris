@@ -1,7 +1,5 @@
 package korol.web.hibernate.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,13 +25,19 @@ public class StudentController {
 	private final StudentService studentService;
 	
 	@GetMapping("all")
-	public List<Student> getStudents(@RequestParam (value = "name", required = false) String name)
+	public ResponseEntity<Object> getStudents(@RequestParam (value = "name", required = false) String name)
 	{
+		try
+		{
 		if (name != null && !(name.isBlank()))
 		{
-			return studentService.fetchByNameLike(name);
+			return  ResponseEntity.ok(studentService.fetchByNameLike(name));
 		}
-		return studentService.fetchAll();
+		return ResponseEntity.ok(studentService.fetchAll());
+		}
+		catch (Exception ex) {
+	        return ResponseEntity.badRequest().body(ex.getMessage());
+	    }
 	}
 	
 	@GetMapping ("/{id}")
@@ -82,6 +86,19 @@ public class StudentController {
 		{
 			studentService.deleteStudent(id);
 			return ResponseEntity.ok("Yes, you murdered them, you happy now?");
+		}
+		catch (Exception ex) {
+	        return ResponseEntity.badRequest().body(ex.getMessage());
+	    }
+	}
+	
+	@PatchMapping ("/{id}/setjob")
+	public ResponseEntity<Object> setJobToStudent(@PathVariable ("id") Integer id, @RequestBody Integer job_id)
+	{
+		try
+		{
+			studentService.addJobToStudent(job_id, id);
+			return ResponseEntity.ok(studentService.fetchStudent(id));
 		}
 		catch (Exception ex) {
 	        return ResponseEntity.badRequest().body(ex.getMessage());

@@ -10,9 +10,9 @@ import korol.web.hibernate.serviceimpl.EmptyJSONEx;
 
 @Service
 public interface StudentService {
-	List <Student> fetchAll();
+	List <Student> fetchAll() throws EmptyJSONEx;
 	
-	List <Student> fetchByNameLike(String name);
+	List <Student> fetchByNameLike(String name) throws EmptyJSONEx;
 	
 	Student fetchStudent(Integer id);
 	

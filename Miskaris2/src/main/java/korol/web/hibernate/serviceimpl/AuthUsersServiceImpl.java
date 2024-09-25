@@ -2,6 +2,7 @@ package korol.web.hibernate.serviceimpl;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class AuthUsersServiceImpl implements UserDetailsService {
-
+	@Autowired
 	private final AuthUserRepos authUserRepos;
 
 	@Override

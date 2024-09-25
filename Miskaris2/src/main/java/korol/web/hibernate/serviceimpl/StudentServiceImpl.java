@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
@@ -26,14 +27,16 @@ public class StudentServiceImpl implements StudentService{
 	private EntityManager session;
 
 	@Override
-	public List <Student> fetchAll() {
+	public List <Student> fetchAll() throws EmptyJSONEx {
 		List<Student> students = session.createQuery("FROM Student", Student.class).getResultList();
+		if (students.isEmpty()) throw new EmptyJSONEx();
 		return students;
 	}
 
 	@Override
-	public List<Student> fetchByNameLike(String name) {
+	public List<Student> fetchByNameLike(String name) throws EmptyJSONEx {
 		List<Student> students = session.createQuery("FROM Student WHERE fname || ' ' || lname LIKE :name", Student.class).setParameter("name", "%".concat(name).concat("%")).getResultList();
+		if (students.isEmpty()) throw new EmptyJSONEx();
 		return students;
 	}
 

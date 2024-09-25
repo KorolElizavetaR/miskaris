@@ -53,4 +53,10 @@ public class JobController {
 			return ResponseEntity.notFound().build();
 		}
 	}
+	
+	// код добавления работы
+	
+	// код изменения работы
+	
+	// код удаления работы
 }

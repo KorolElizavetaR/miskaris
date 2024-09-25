@@ -21,7 +21,7 @@ public class SecurityConfig {
 	private final AuthUsersServiceImpl authUsersServiceImpl;
 
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception
-	{
+	{	
 		auth.userDetailsService(authUsersServiceImpl).passwordEncoder(getPasswordEncoder());
 	}
 	
@@ -37,12 +37,11 @@ public class SecurityConfig {
 		http.
 			csrf(csrf -> csrf.disable()).
 			sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).
-			authorizeHttpRequests((requests) -> 
-				// Только админам:  
-				requests.requestMatchers("/check/admin").hasRole("ADMIN").
-				// Доступно всем:
-				requestMatchers("/check/guest", "/jobs/all", "/jobs/{id}").permitAll(). 
-				// остальное всем авторизованным
+			authorizeHttpRequests((requests) ->  
+				requests.
+				requestMatchers("/check/guest", "/jobs/all", "/jobs/{id}").permitAll().
+				requestMatchers("/students/all", "/students/{id}", "/students/{id}").hasRole("USER").
+				requestMatchers("/check/admin", "/jobs/**", "/students/**").hasRole("ADMIN").
 				anyRequest().authenticated()).
 			logout((logout) -> logout.permitAll()).
 			httpBasic(Customizer.withDefaults());
