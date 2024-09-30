@@ -17,3 +17,11 @@ INSERT INTO Book(title, author) VALUES
 INSERT INTO Book(title, author, pages) VALUES
 	('Степной волк', 'Герман Гэссе', 345),
 	('Дэмиан', 'Герман Гэссе', 467);
+	
+CREATE TABLE log_books
+(
+	message text NOT NULL,
+	executed_at timestamp default NOW(),
+	PRIMARY KEY (message, executed_at)
+);
+SELECT * FROM log_books;
