@@ -16,7 +16,8 @@ public class Laba3Application {
 		BookServiceManager service = context.getBean(BookServiceManager.class);
 		service.addObserver(context.getBean(BookObserver.class));
 		service.getAllBooks().stream().forEach(System.out::println);
-		service.addBook(Book.builder("Жизнь насекомых", "Пелевин").build());
+		service.addBook(Book.builder("Чапаев и Пустота", "Пелевин").setPages(456).build());
+		service.getBooksByAuthor("Булгаков").forEach(System.out::println);
 	}
 
 }
