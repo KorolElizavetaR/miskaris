@@ -33,7 +33,7 @@ public class BookService {
 	
 	public Book getBookById(Integer id)
 	{
-		return bookRepository.findById(id).orElse(null);
+		return bookRepository.findById(id).orElseThrow(()->new NullPointerException());
 	}
 	
 	public Book addBook(Book book)

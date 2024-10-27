@@ -23,6 +23,7 @@ public class Book {
 	 @Id
 	 @GeneratedValue(strategy = GenerationType.IDENTITY)
 	 @Column(name = "id")
+	 @Setter
 	 private Integer id;
 
 	 @Column(name = "title", nullable = false, length = 50)
