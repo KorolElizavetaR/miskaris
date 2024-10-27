@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<catalog>
+    <book id="bk101">
+        <author>Matthew</author>
+        <title>XML Developer's Guide</title>
+        <genre>Computer</genre>
+        <price currency="USD">50.0</price>
+    </book>
+    <book id="bk102">
+        <author>Ralls, Kim</author>
+        <title>Midnight Rain</title>
+        <genre>Fantasy</genre>
+        <price currency="USD">5.95</price>
+	</book>
+
+</catalog>
