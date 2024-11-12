@@ -4,14 +4,24 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.fop.apps.Fop;
+import org.apache.fop.apps.FopFactory;
+import org.apache.fop.apps.MimeConstants;
 
+import javax.xml.transform.*;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import java.io.File;
+import java.io.FileOutputStream;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -36,10 +46,17 @@ public class Main {
 			File xsdFile = new File("src/main/resources/books.xsd");
 			File xslfile = new File("src/main/resources/books.xsl");
 			File htmlfile = new File("src/main/resources/books.html");
-			validateXMLSchema(xsdFile, xmlFile);
+			String xmlInputPath = "src/main/resources/books.xml";
+			String xslt = "src/main/resources/books.xslt";
+			String outputXmlPath = "src/main/resources/transformed_books.xml"; // выходной XML после XSLT
+			String xslfoPath = "src/main/resources/books.xslfo"; // XSL-FO для создания PDF
+			String pdfOutputPath = "src/main/resources/books.pdf";
+			// validateXMLSchema(xsdFile, xmlFile);
 			// DOMparser(xmlFile).stream().forEach(System.out::println);
-			//XPath(xmlFile).stream().forEach(System.out::println);
-			XSLT(xmlFile, xslfile, htmlfile);
+			// XPath(xmlFile).stream().forEach(System.out::println);
+			// XSLT(xmlFile, xslfile, htmlfile);
+			transformXml(xmlInputPath, xslt, outputXmlPath);
+			transformToPdf(outputXmlPath, xslfoPath, pdfOutputPath);
 		} catch (Exception ex) {
 			System.err.println(ex.getLocalizedMessage());
 		}
@@ -113,6 +130,26 @@ public class Main {
 		transformer.transform(new StreamSource(xmlfile), new StreamResult(htmlfile));
 		System.out.println("Transformation completed.");
 	}
-	
-	
+
+	public static void transformXml(String xmlInputPath, String xsltPath, String outputXmlPath) throws Exception {
+		TransformerFactory factory = TransformerFactory.newInstance();
+		Source xslt = new StreamSource(new File(xsltPath));
+		Source xml = new StreamSource(new File(xmlInputPath));
+		Result result = new StreamResult(new File(outputXmlPath));
+
+		Transformer transformer = factory.newTransformer(xslt);
+		transformer.transform(xml, result);
+	}
+
+	public static void transformToPdf(String xmlInputPath, String xslfoPath, String pdfOutputPath) throws Exception {
+		FopFactory fopFactory = FopFactory.newInstance(new File(".").toURI());
+		File pdfFile = new File(pdfOutputPath);
+
+		try (FileOutputStream out = new FileOutputStream(pdfFile)) {
+			Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, out);
+			TransformerFactory factory = TransformerFactory.newInstance();
+			Transformer transformer = factory.newTransformer(new StreamSource(new File(xslfoPath)));
+			transformer.transform(new StreamSource(new File(xmlInputPath)), new SAXResult(fop.getDefaultHandler()));
+		}
+	}
 }

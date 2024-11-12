@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
+    <xsl:output method="xml" omit-xml-declaration="yes"/>
+
+    <xsl:template match="/library">
+        <fo:root>
+            <fo:layout-master-set>
+                <fo:simple-page-master master-name="A4" page-height="29.7cm" page-width="21cm" margin="1cm">
+                    <fo:region-body/>
+                </fo:simple-page-master>
+            </fo:layout-master-set>
+
+            <fo:page-sequence master-reference="A4">
+                <fo:flow flow-name="xsl-region-body">
+                    <fo:block font-size="14pt" font-weight="bold" text-align="center" space-after="10mm">
+                        Library Books List
+                    </fo:block>
+                    <xsl:for-each select="genre">
+                        <fo:block font-size="12pt" font-weight="bold" space-before="5mm">
+                            Genre: <xsl:value-of select="@name"/>
+                        </fo:block>
+                        <xsl:for-each select="book">
+                            <fo:block>
+                                <fo:inline font-weight="bold">Title: </fo:inline><xsl:value-of select="title"/>
+                            </fo:block>
+                            <fo:block>
+                                <fo:inline font-weight="bold">Author: </fo:inline><xsl:value-of select="author"/>
+                            </fo:block>
+                            <fo:block>
+                                <fo:inline font-weight="bold">Price: </fo:inline>
+                                <xsl:value-of select="price"/>&#160;
+                                <xsl:value-of select="price/@currency"/>
+                            </fo:block>
+                            <fo:block space-before="5mm"/>
+                        </xsl:for-each>
+                    </xsl:for-each>
+                </fo:flow>
+            </fo:page-sequence>
+        </fo:root>
+    </xsl:template>
+</xsl:stylesheet>

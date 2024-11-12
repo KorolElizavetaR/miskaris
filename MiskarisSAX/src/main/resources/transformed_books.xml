@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8"?><library><genre name="Computer"><book><id>bk101</id><author>Matthew</author><title>XML Developer's Guide</title><price currency="USD">50.0</price></book></genre><genre name="Fantasy"><book><id>bk102</id><author>Ralls, Kim</author><title>Midnight Rain</title><price currency="USD">5.95</price></book></genre></library>
