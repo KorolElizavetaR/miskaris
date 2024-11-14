@@ -19,89 +19,69 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping ("students")
+@RequestMapping("students")
 public class StudentController {
 	@Autowired
 	private final StudentService studentService;
-	
+
 	@GetMapping("all")
-	public ResponseEntity<Object> getStudents(@RequestParam (value = "name", required = false) String name)
-	{
-		try
-		{
-		if (name != null && !(name.isBlank()))
-		{
-			return  ResponseEntity.ok(studentService.fetchByNameLike(name));
+	public ResponseEntity<Object> getStudents(@RequestParam(value = "name", required = false) String name) {
+		try {
+			if (name != null && !(name.isBlank())) {
+				return ResponseEntity.ok(studentService.fetchByNameLike(name));
+			}
+			return ResponseEntity.ok(studentService.fetchAll());
+		} catch (Exception ex) {
+			return ResponseEntity.badRequest().body(ex.getMessage());
 		}
-		return ResponseEntity.ok(studentService.fetchAll());
-		}
-		catch (Exception ex) {
-	        return ResponseEntity.badRequest().body(ex.getMessage());
-	    }
 	}
-	
-	@GetMapping ("/{id}")
-	public ResponseEntity<Student> getStudent(@PathVariable ("id") Integer id)
-	{
-		try
-		{
+
+	@GetMapping("/{id}")
+	public ResponseEntity<Student> getStudent(@PathVariable("id") Integer id) {
+		try {
 			return ResponseEntity.ok(studentService.fetchStudent(id));
-		}
-		catch(NoResultException ex)
-		{
+		} catch (NoResultException ex) {
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
-	@PostMapping ("/add")
-	public ResponseEntity<Object> addStudent(@RequestBody Student student)
-	{
-		try
-		{
+
+	@PostMapping("/add")
+	public ResponseEntity<Object> addStudent(@RequestBody Student student) {
+		try {
 			studentService.addStudent(student);
 			return ResponseEntity.ok(studentService.fetchStudent((int) student.getId()));
+		} catch (Exception ex) {
+			return ResponseEntity.badRequest().body(ex.getMessage());
 		}
-		catch (Exception ex) {
-	        return ResponseEntity.badRequest().body(ex.getMessage());
-	    }
 	}
-	
-	@PatchMapping ("/{id}")
-	public ResponseEntity<Object> editStudent(@PathVariable ("id") Integer id, @RequestBody Student student)
-	{
-		try
-		{
+
+	@PatchMapping("/{id}")
+	public ResponseEntity<Object> editStudent(@PathVariable("id") Integer id, @RequestBody Student student) {
+		try {
 			studentService.editStudent(student, id);
 			return ResponseEntity.ok(studentService.fetchStudent(id));
+		} catch (Exception ex) {
+			return ResponseEntity.badRequest().body(ex.getMessage());
 		}
-		catch (Exception ex) {
-	        return ResponseEntity.badRequest().body(ex.getMessage());
-	    }
 	}
-	
-	@DeleteMapping ("/{id}")
-	public ResponseEntity<Object> deleteStudent(@PathVariable ("id") Integer id)
-	{
-		try
-		{
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Object> deleteStudent(@PathVariable("id") Integer id) {
+		try {
 			studentService.deleteStudent(id);
 			return ResponseEntity.ok("Yes, you murdered them, you happy now?");
+		} catch (Exception ex) {
+			return ResponseEntity.badRequest().body(ex.getMessage());
 		}
-		catch (Exception ex) {
-	        return ResponseEntity.badRequest().body(ex.getMessage());
-	    }
 	}
-	
-	@PatchMapping ("/{id}/setjob")
-	public ResponseEntity<Object> setJobToStudent(@PathVariable ("id") Integer id, @RequestBody Integer job_id)
-	{
-		try
-		{
+
+	@PatchMapping("/{id}/setjob")
+	public ResponseEntity<Object> setJobToStudent(@PathVariable("id") Integer id, @RequestBody Integer job_id) {
+		try {
 			studentService.addJobToStudent(job_id, id);
 			return ResponseEntity.ok(studentService.fetchStudent(id));
+		} catch (Exception ex) {
+			return ResponseEntity.badRequest().body(ex.getMessage());
 		}
-		catch (Exception ex) {
-	        return ResponseEntity.badRequest().body(ex.getMessage());
-	    }
 	}
 }
