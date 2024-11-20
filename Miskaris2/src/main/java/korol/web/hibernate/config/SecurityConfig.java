@@ -40,7 +40,7 @@ public class SecurityConfig {
 			authorizeHttpRequests((requests) ->  
 				requests.
 				requestMatchers("/check/guest", "/jobs/all", "/jobs/{id}").permitAll().
-				requestMatchers("/students/all", "/students/{id}", "/students/{id}").hasRole("USER").
+				requestMatchers("/students/all", "/students/{id}").hasAnyRole("USER", "ADMIN").
 				requestMatchers("/check/admin", "/jobs/**", "/students/**").hasRole("ADMIN").
 				anyRequest().authenticated()).
 			logout((logout) -> logout.permitAll()).
